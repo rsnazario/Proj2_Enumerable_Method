@@ -141,3 +141,27 @@ puts exc6_a
 puts exc6_b
 puts exc6_c
 
+# exercise 7
+
+def my_count(arr, search = nil)
+    return 0 if arr.length == 0
+    return arr.length if search.nil?
+    i = 0 
+    counter = 0
+    while i < arr.length do 
+        if arr[i] == search
+            counter += 1
+        end
+        i += 1
+    end
+    return counter
+end
+
+
+exc7_a = my_count([1, 2, 3, 2, 5, 6, 2, 8, 2], 2)
+exc7_b = my_count([])
+exc7_c = my_count([1, 2, 3, 4, 5, 6, 7])
+
+puts exc7_a
+puts exc7_b
+puts exc7_c
