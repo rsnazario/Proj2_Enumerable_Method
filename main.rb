@@ -192,4 +192,26 @@ print exc8_b
 puts
 
 
-    
+# exercise 9
+
+def my_inject(init, finish, last_included = true)
+    aux = 0
+    # deals with multiplication, setting the initial value to 1
+    aux = 1 if yield(0, init) == 0
+    finish -= 1 unless last_included
+    while init <= finish do
+        aux = yield(aux, init)
+        init += 1
+    end
+    return aux
+end
+
+exc9_a = my_inject(5, 10, true) do |sum, n|
+    sum + n
+end
+exc9_b = my_inject(5, 10, true) do |sum, n|
+    sum * n
+end
+
+puts exc9_a
+puts exc9_b
