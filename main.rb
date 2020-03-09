@@ -109,3 +109,35 @@ end
 puts exc5_a
 puts exc5_b
 puts exc5_c
+
+# exercise 6
+
+def my_none? (arr)
+    if arr.length == 0 
+        return true
+    end
+    i = 0
+    while i < arr.length do
+        if yield(arr[i])
+            return false
+        end
+        i+=1
+    end
+    return true
+end
+
+exc6_a = my_none?(%w[cat ant bear]) do |word|
+    word.length == 5
+end
+
+exc6_b = my_none?(%w[cat ant bear]) do |word|
+    word.length >= 4
+end
+exc6_c = my_none?([]) do |word|
+    word.length > 1
+end
+
+puts exc6_a
+puts exc6_b
+puts exc6_c
+
