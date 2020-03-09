@@ -77,4 +77,35 @@ end
 puts exc4_a
 puts exc4_b
 
-    
+
+# exercise 5
+
+def my_any? (arr)
+    if arr.length == 0
+        return false
+    end
+    i = 0
+    while i < arr.length do
+        if !yield(arr[i])
+            return false
+        end
+        i += 1
+    end
+    return true
+end
+
+exc5_a = my_any?(%w[ant bear cat]) do |word|
+    word.length > 3
+end
+
+exc5_b = my_any?(%w[lion bear fish]) do |word|
+    word.length > 3
+end
+
+exc5_c = my_any?([]) do |word|
+    word.length > 3
+end
+   
+puts exc5_a
+puts exc5_b
+puts exc5_c
