@@ -165,3 +165,31 @@ exc7_c = my_count([1, 2, 3, 4, 5, 6, 7])
 puts exc7_a
 puts exc7_b
 puts exc7_c
+
+# exercise 8
+
+def my_map(init, finish, last_included = true)
+    aux = []
+    finish -= 1 unless last_included
+    while init <= finish do
+        aux << yield(init)
+        init += 1
+    end
+    return aux
+end
+
+exc8_a = my_map(1, 4, true) do |i|
+    i*i
+end
+
+exc8_b = my_map(1, 4, true) do |word|
+    "cat"
+end
+
+print exc8_a 
+puts
+print exc8_b
+puts
+
+
+    
