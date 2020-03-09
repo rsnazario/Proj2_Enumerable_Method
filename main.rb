@@ -209,9 +209,25 @@ end
 exc9_a = my_inject(5, 10, true) do |sum, n|
     sum + n
 end
-exc9_b = my_inject(5, 10, true) do |sum, n|
-    sum * n
+exc9_b = my_inject(5, 10, true) do |mult, n|
+    mult * n
 end
+
 
 puts exc9_a
 puts exc9_b
+
+# exercise 10
+def multiply_els(arr)
+    i = 0
+    res = 1
+    while i < arr.length do
+        res = res *  my_inject(arr[i], arr[i]) do |sum, n|
+            sum * n
+        end
+        i += 1
+    end
+    return res
+end
+
+puts multiply_els( [2, 4, 5])
