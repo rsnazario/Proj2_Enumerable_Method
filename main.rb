@@ -29,3 +29,24 @@ my_each_with_index(%w(cat dog fish lion bear human)) do |item, index|
 end
     
 puts exc2
+
+# exercise 3
+
+def my_select (arr, last_included)
+    aux = []
+    i = 0
+    j = arr.length
+    while i < j do
+        if yield(arr[i])
+            aux << arr[i]
+        end
+        i += 1
+    end
+        return aux
+end
+
+result = my_select( [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] , true) do |x|
+    x.even?
+end
+
+print result
