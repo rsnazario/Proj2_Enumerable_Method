@@ -64,4 +64,13 @@ module Enumerable
     return count
   end
 
+  def my_map
+    return to_enum unless block_given?
+    result = []
+    my_each do |i|
+      result << yield(i)
+    end
+    return result
+  end
+
 end
