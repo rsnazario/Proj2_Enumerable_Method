@@ -48,5 +48,20 @@ module Enumerable
     end
     return true
   end
-  
+
+  def my_count(search_for = nil)
+    return self.length unless search_for != nil || block_given?
+    count = 0
+    if !block_given?
+        my_each do |i|
+            count += 1 if i == search_for
+        end
+    else
+        my_each do |i|
+            count += 1 if yield(i)
+        end
+    end
+    return count
+  end
+
 end
