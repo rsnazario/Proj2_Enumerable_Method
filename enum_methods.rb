@@ -32,4 +32,21 @@ module Enumerable
     end
     return true
   end
+
+  def my_any?
+    return to_enum unless block_given?
+    my_each do |i|
+        return true if yield(i)
+    end
+    return false
+  end
+
+  def my_none?
+    return to_enum unless block_given?
+    my_each do |i|
+        return false if yield(i)
+    end
+    return true
+  end
+  
 end
