@@ -15,5 +15,13 @@ module Enumerable
     end
     return self
   end
+  
+  def my_select
+    result = []
+    my_each do |i|
+        result << self[i] if yield(self[i])
+    end
+    result
+  end
 
 end
