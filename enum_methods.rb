@@ -17,11 +17,19 @@ module Enumerable
   end
   
   def my_select
+    return to_enum unless block_given?
     result = []
     my_each do |i|
-        result << self[i] if yield(self[i])
+        result << i if yield(i)
     end
-    result
+    return result
   end
 
+  def my_all?
+    return to_enum unless block_given?
+    my_each do |i|
+      return false unless yield(i)
+    end
+    return true
+  end
 end
