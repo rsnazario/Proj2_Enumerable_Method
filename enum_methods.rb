@@ -77,4 +77,14 @@ module Enumerable
     end
     result
   end
+
+  def my_inject
+    return to_enum unless block_given?
+
+    final_result = to_a[0]
+    size.times do |i|
+      final_result = i != 0 ? yield(final_result, to_a[i]) : final_result
+    end
+    final_result
+  end
 end
