@@ -68,7 +68,7 @@ module Enumerable
     count
   end
 
-  def my_map2(proc_given = nil)
+  def my_map(proc_given = nil)
     return to_enum unless block_given? || proc_given
 
     result = []
