@@ -68,12 +68,13 @@ module Enumerable
     count
   end
 
-  def my_map
-    return to_enum unless block_given?
+  def my_map2(proc_given = nil)
+    return to_enum unless block_given? || proc_given
 
     result = []
     my_each do |i|
-      result << yield(i)
+      operation = block_given? ? yield(i) : proc_given.call(i)
+      result << operation
     end
     result
   end
@@ -86,5 +87,11 @@ module Enumerable
       final_result = i != 0 ? yield(final_result, to_a[i]) : final_result
     end
     final_result
+  end
+end
+
+def multiply_els(arr)
+  arr.my_inject do |x, y|
+    x * y
   end
 end
