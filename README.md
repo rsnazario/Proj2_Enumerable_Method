@@ -35,6 +35,8 @@ Ruby Enumerable Documentation usere [here](https://ruby-doc.org/core-2.6.5/Enume
      https://ruby-doc.org/core-2.5.1/Range.html#method-i-size
      https://github.com/jubaan/m__advanced-building-blocks__enumerable-methods
      https://www.rubyguides.com/2016/02/ruby-procs-and-lambdas/
+     https://makandracards.com/sandheep/15801-using-send-method-in-ruby
+     https://ruby-doc.org/core-2.5.1/Regexp.html
 
 ## 🤝 Contributing
 
