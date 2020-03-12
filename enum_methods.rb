@@ -79,14 +79,22 @@ module Enumerable
     result
   end
 
-  def my_inject
-    return to_enum unless block_given?
-
+  def my_inject(arg_num = nil, arg_op = nil)
+    arg_op = arg_num if arg_op.nil? && arg_num.is_a?(Symbol)
     final_result = to_a[0]
-    size.times do |i|
-      final_result = i != 0 ? yield(final_result, to_a[i]) : final_result
+    
+    if !arg_op.nil?
+      size.times do |i|
+        final_result = i != 0 ? final_result.send(arg_op, to_a[i]) : final_result
+      end
+      final_result = arg_num.is_a?(Integer) ? final_result.send(arg_op, arg_num) : final_result
+      return final_result
+    else
+      size.times do |i|
+        final_result = i != 0 ? yield(final_result, to_a[i]) : final_result
+      end
     end
-    final_result
+    final_result = arg_num.is_a?(Integer) ? yield(final_result, arg_num) : final_result
   end
 end
 
