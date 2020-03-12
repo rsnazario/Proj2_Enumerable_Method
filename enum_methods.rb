@@ -1,5 +1,5 @@
 module Enumerable
-  def my_each2
+  def my_each
     return to_enum unless block_given?
 
     size.times do |i|
@@ -25,7 +25,7 @@ module Enumerable
     result
   end
 
-  def my_all?
+  def my_all2?
     return to_enum unless block_given?
 
     my_each do |i|
@@ -34,22 +34,73 @@ module Enumerable
     true
   end
 
-  def my_any?
-    return to_enum unless block_given?
+  def my_all?(arg = nil)
+    return false if (!block_given? && arg.nil?)
 
-    my_each do |i|
-      return true if yield(i)
+    if arg.is_a?(Integer)
+      my_each do |i|
+        return false unless i == arg
+      end
+    elsif arg.is_a?(Regexp)
+      my_each do |i|
+        return false unless i.match(arg)
+      end
+    elsif !arg.is_a?(Integer) && !block_given?
+      my_each do |i|
+        return false unless i.is_a? arg
+      end
+    else
+      my_each do |i|
+        return false unless yield(i)
+      end
+    end
+    true
+  end
+
+  def my_any?(arg = nil)
+    return false if (!block_given? && arg.nil?)
+
+    if arg.is_a?(Regexp)
+      my_each do |i|
+        return true if i.match(arg)
+      end
+    elsif arg.is_a?(Class)
+      my_each do |i|
+        return true if i.is_a? arg
+    end
+    elsif block_given?
+      my_each do |i|
+        return true if yield(i)
+      end
+    else
+      my_each do |i|
+        return true if i == arg
+      end
     end
     false
   end
 
-  def my_none?
-    return to_enum unless block_given?
+  def my_none?(arg = nil)
+    return false if (!block_given? && arg.nil?)
 
-    my_each do |i|
-      return false if yield(i)
+    if arg.is_a?(Integer)
+      my_each do |i|
+        return true unless i == arg
+      end
+    elsif arg.is_a?(Regexp)
+      my_each do |i|
+        return true unless i.match(arg)
+      end
+    elsif !arg.is_a?(Integer) && !block_given?
+      my_each do |i|
+        return true unless i.is_a? arg
+      end
+    else
+      my_each do |i|
+        return true unless yield(i)
+      end
     end
-    true
+    false
   end
 
   def my_count(search_for = nil)
@@ -82,7 +133,7 @@ module Enumerable
   def my_inject(arg_num = nil, arg_op = nil)
     arg_op = arg_num if arg_op.nil? && arg_num.is_a?(Symbol)
     final_result = to_a[0]
-    
+
     if !arg_op.nil?
       size.times do |i|
         final_result = i != 0 ? final_result.send(arg_op, to_a[i]) : final_result
