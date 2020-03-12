@@ -1,3 +1,7 @@
+# rubocop:disable Metrics/ModuleLength
+# rubocop:disable Metrics/CyclomaticComplexity
+# rubocop:disable Metrics/PerceivedComplexity
+
 module Enumerable
   def my_each
     return to_enum unless block_given?
@@ -35,7 +39,7 @@ module Enumerable
   end
 
   def my_all?(arg = nil)
-    return false if (!block_given? && arg.nil?)
+    return false if !block_given? && arg.nil?
 
     if arg.is_a?(Integer)
       my_each do |i|
@@ -58,7 +62,7 @@ module Enumerable
   end
 
   def my_any?(arg = nil)
-    return false if (!block_given? && arg.nil?)
+    return false if !block_given? && arg.nil?
 
     if arg.is_a?(Regexp)
       my_each do |i|
@@ -67,7 +71,7 @@ module Enumerable
     elsif arg.is_a?(Class)
       my_each do |i|
         return true if i.is_a? arg
-    end
+      end
     elsif block_given?
       my_each do |i|
         return true if yield(i)
@@ -81,7 +85,7 @@ module Enumerable
   end
 
   def my_none?(arg = nil)
-    return false if (!block_given? && arg.nil?)
+    return false if !block_given? && arg.nil?
 
     if arg.is_a?(Integer)
       my_each do |i|
@@ -154,3 +158,7 @@ def multiply_els(arr)
     x * y
   end
 end
+
+# rubocop:enable Metrics/ModuleLength
+# rubocop:enable Metrics/CyclomaticComplexity
+# rubocop:enable Metrics/PerceivedComplexity
