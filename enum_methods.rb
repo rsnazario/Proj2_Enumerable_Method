@@ -1,18 +1,21 @@
 # rubocop:disable Metrics/ModuleLength
 # rubocop:disable Metrics/CyclomaticComplexity
 # rubocop:disable Metrics/PerceivedComplexity
+# rubocop:disable Metrics/MethodLength
 
 module Enumerable
   def my_each
-    return to_enum unless block_given?
+    return to_enum(:my_each) unless block_given?
 
+    result = []
     size.times do |i|
-      yield(to_a[i])
+      result << yield(to_a[i])
     end
+    result
   end
 
   def my_each_with_index
-    return to_enum unless block_given?
+    return to_enum(:my_each_with_index) unless block_given?
 
     size.times do |i|
       yield(to_a[i], i)
@@ -20,7 +23,7 @@ module Enumerable
   end
 
   def my_select
-    return to_enum unless block_given?
+    return to_enum(:my_select) unless block_given?
 
     result = []
     my_each do |i|
@@ -29,17 +32,18 @@ module Enumerable
     result
   end
 
-  def my_all2?
-    return to_enum unless block_given?
-
-    my_each do |i|
-      return false unless yield(i)
-    end
-    true
-  end
-
   def my_all?(arg = nil)
-    return false if !block_given? && arg.nil?
+    if !block_given? && arg.nil?
+      memo = to_a[0]
+
+      return true if length == 1 && memo == true
+      return false if length == 1 && memo != true
+
+      size.times do |i|
+        return false unless memo == to_a[i]
+      end
+      return true
+    end
 
     if arg.is_a?(Integer)
       my_each do |i|
@@ -62,7 +66,12 @@ module Enumerable
   end
 
   def my_any?(arg = nil)
-    return false if !block_given? && arg.nil?
+    if !block_given? && arg.nil?
+      my_each do |i|
+        return true if i == true
+      end
+      return false
+    end
 
     if arg.is_a?(Regexp)
       my_each do |i|
@@ -85,26 +94,31 @@ module Enumerable
   end
 
   def my_none?(arg = nil)
-    return false if !block_given? && arg.nil?
+    if !block_given? && arg.nil?
+      my_each do |i|
+        return false if i == true
+      end
+      return true
+    end
 
     if arg.is_a?(Integer)
       my_each do |i|
-        return true unless i == arg
+        return false unless i == arg
       end
     elsif arg.is_a?(Regexp)
       my_each do |i|
-        return true unless i.match(arg)
+        return false unless i.match(arg)
       end
     elsif !arg.is_a?(Integer) && !block_given?
       my_each do |i|
-        return true unless i.is_a? arg
+        return false unless i.is_a? arg
       end
     else
       my_each do |i|
-        return true unless yield(i)
+        return false unless yield(i)
       end
     end
-    false
+    true
   end
 
   def my_count(search_for = nil)
@@ -162,3 +176,4 @@ end
 # rubocop:enable Metrics/ModuleLength
 # rubocop:enable Metrics/CyclomaticComplexity
 # rubocop:enable Metrics/PerceivedComplexity
+# rubocop:enable Metrics/MethodLength
