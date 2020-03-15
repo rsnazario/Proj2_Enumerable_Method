@@ -2,7 +2,6 @@
 # rubocop:disable Metrics/CyclomaticComplexity
 # rubocop:disable Metrics/PerceivedComplexity
 # rubocop:disable Metrics/MethodLength
-
 module Enumerable
   def my_each
     return to_enum(:my_each) unless block_given?
@@ -34,13 +33,8 @@ module Enumerable
 
   def my_all?(arg = nil)
     if !block_given? && arg.nil?
-      memo = to_a[0]
-
-      return true if length == 1 && memo == true
-      return false if length == 1 && memo != true
-
-      size.times do |i|
-        return false unless memo == to_a[i]
+      my_each do |i|
+        return false if i == false || i.nil?
       end
       return true
     end
@@ -51,7 +45,7 @@ module Enumerable
       end
     elsif arg.is_a?(Regexp)
       my_each do |i|
-        return false unless i.match(arg)
+        return false unless i =~ arg
       end
     elsif !arg.is_a?(Integer) && !block_given?
       my_each do |i|
@@ -68,14 +62,14 @@ module Enumerable
   def my_any?(arg = nil)
     if !block_given? && arg.nil?
       my_each do |i|
-        return true if i == true
+        return true if i != false && !i.nil?
       end
       return false
     end
 
     if arg.is_a?(Regexp)
       my_each do |i|
-        return true if i.match(arg)
+        return true if i =~ arg
       end
     elsif arg.is_a?(Class)
       my_each do |i|
@@ -96,26 +90,26 @@ module Enumerable
   def my_none?(arg = nil)
     if !block_given? && arg.nil?
       my_each do |i|
-        return false if i == true
+        return false unless i == false || i.nil?
       end
       return true
     end
 
     if arg.is_a?(Integer)
       my_each do |i|
-        return false unless i == arg
+        return false if i == arg
       end
     elsif arg.is_a?(Regexp)
       my_each do |i|
-        return false unless i.match(arg)
+        return false if i =~ arg
       end
     elsif !arg.is_a?(Integer) && !block_given?
       my_each do |i|
-        return false unless i.is_a? arg
+        return false if i.is_a? arg
       end
     else
       my_each do |i|
-        return false unless yield(i)
+        return false if yield(i)
       end
     end
     true
