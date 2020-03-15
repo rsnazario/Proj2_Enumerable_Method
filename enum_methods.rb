@@ -35,9 +35,8 @@ module Enumerable
   def my_all?(arg = nil)
     if !block_given? && arg.nil?
       memo = to_a[0]
-
-      return true if length == 1 && memo == true
-      return false if length == 1 && memo != true
+      
+      return (length == 1 && (memo != false && !memo.nil?)) ? true : false
 
       size.times do |i|
         return false unless memo == to_a[i]
@@ -75,7 +74,7 @@ module Enumerable
 
     if arg.is_a?(Regexp)
       my_each do |i|
-        return true if i.match(arg)
+        return true if i =~ arg
       end
     elsif arg.is_a?(Class)
       my_each do |i|
@@ -103,19 +102,19 @@ module Enumerable
 
     if arg.is_a?(Integer)
       my_each do |i|
-        return false unless i == arg
+        return false if i == arg
       end
     elsif arg.is_a?(Regexp)
       my_each do |i|
-        return false unless i.match(arg)
+        return false unless i =~ arg
       end
     elsif !arg.is_a?(Integer) && !block_given?
       my_each do |i|
-        return false unless i.is_a? arg
+        return false if i.is_a? arg
       end
     else
       my_each do |i|
-        return false unless yield(i)
+        return false if yield(i)
       end
     end
     true
