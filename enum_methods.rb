@@ -70,7 +70,7 @@ module Enumerable
 
     if arg.is_a?(Regexp)
       my_each do |i|
-        return true if i =~ arg 
+        return true if i =~ arg
       end
     elsif arg.is_a?(Class)
       my_each do |i|
