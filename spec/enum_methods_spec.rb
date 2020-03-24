@@ -71,7 +71,21 @@ RSpec.describe Enumerable do
     context 'if no block given and object is empty return false' do
       it {expect([].my_any?).to eq(false)}
     end
-    
+  end
+
+  describe '#my_none?' do
+    context 'if no block given return true only if none of collection members is true' do
+      it {expect([nil, false].my_none?).to eq(true)}
+    end
+    context 'if argument is Regular expression return false if all any value of object contains it' do
+      it {expect(%w[ant beat cat].my_none?(/t/)).to eq(false)}
+    end
+    context 'if argument is Class return true if all any value of object is not of that class' do
+      it {expect(%w[ant beat cat].my_none?Integer).to eq(true)}
+    end
+    context 'if no block given and object is empty return true' do
+      it {expect([].my_none?).to eq(true)}
+    end
   end
 
 end
