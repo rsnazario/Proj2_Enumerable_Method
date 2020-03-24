@@ -88,4 +88,33 @@ RSpec.describe Enumerable do
     end
   end
 
+  describe '#my_count' do
+    context 'if no block given return the length of the array provided' do
+      it {expect(arr_1.my_count).to eq(arr_1.length)}
+    end
+    context 'return the number of even numbers on the array' do
+      it {expect(arr_1.my_count{|x| x % 2 == 0}).to eq(arr_1.count{|x| x % 2 == 0})}
+    end
+  end
+
+  describe '#my_map' do
+    context 'if no block given return enumerator' do
+      it {expect(arr_1.my_each_with_index).to be_a(Enumerator)}
+    end
+    context 'return the new array with the result of the applied block given' do
+      it {expect((1..4).my_map{|i| i*i}).to eq((1..4).map{|i| i*i})}
+    end
+  end
+
+  describe '#my_inject' do
+    context 'returns the new array with the result of applied block given' do
+      it {expect((5..10).my_inject { |sum, n| sum + n }).to eq((5..10).inject { |sum, n| sum + n })}
+      it {expect((5..10).my_inject(1) { |product, n| product * n }).to eq((5..10).inject(1) { |product, n| product * n })}
+    end
+    context 'return longest word in the array' do
+      it {expect(arr_string1.my_inject {|memo, word|
+        memo.length > word.length ? memo : word}).to eq(arr_string1.inject {|memo, word|
+          memo.length > word.length ? memo : word})}
+    end
+  end
 end
