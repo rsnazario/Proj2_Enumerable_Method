@@ -5,7 +5,7 @@ require './enum_methods'
 RSpec.describe Enumerable do
   let(:arr_1) { [1, 2, 3, 4, 5] }
   let(:arr_2) { [1, 2, nil, 4] }
-  let(:arr_3) { ['cat', 3, true, 'board'] }
+  let(:arr_3) { [1, 2, 3, 4, 'cool'] }
   let(:arr_string1) { %w[cat dog wombat] }
 
   describe '#my_each' do
@@ -55,8 +55,14 @@ RSpec.describe Enumerable do
     context 'if argument is Regular expression return true if all objects contain it' do
       it { expect(%w[ant beat cat].my_all?(/t/)).to eq(true) }
     end
+    context 'if argument is RegEx return false if any object does not contain it' do
+      it { expect(%w[ant bear cat].my_all?(/t/)).to eq(false) }
+    end
     context 'if argument is Class return true if all objects are of that class' do
       it { expect(arr_1.my_all?(Integer)).to eq(true) }
+    end
+    context 'if argument is Class return false if not all objects are of that class' do
+      it { expect(arr_3.my_all?(Integer)).to eq(false) }
     end
   end
 
@@ -67,8 +73,14 @@ RSpec.describe Enumerable do
     context 'if argument is Regular expression return true if any objects contain it' do
       it { expect(%w[dog bear cat].my_any?(/t/)).to eq(true) }
     end
+    context 'if argument is Regular expression return false if none object contain it' do
+      it { expect(%w[dog bear cat].my_any?(/x/)).to eq(false) }
+    end
     context 'if argument is Class return true if any object is of that class' do
       it { expect(arr_1.my_any?(Integer)).to eq(true) }
+    end
+    context 'if argument is Class return false if none object is of that class' do
+      it { expect(arr_string1.my_any?(Integer)).to eq(false) }
     end
     context 'if no block given and object is empty return false' do
       it { expect([].my_any?).to eq(false) }
@@ -79,11 +91,17 @@ RSpec.describe Enumerable do
     context 'if no block given return true only if none of collection members is true' do
       it { expect([nil, false].my_none?).to eq(true) }
     end
-    context 'if argument is Regular expression return false if all any value of object contains it' do
-      it { expect(%w[ant beat cat].my_none?(/t/)).to eq(false) }
+    context 'if argument is Regular expression return false if any value of object contains it' do
+      it { expect(%w[ant beat cat].my_none?(/c/)).to eq(false) }
     end
-    context 'if argument is Class return true if all any value of object is not of that class' do
+    context 'if argument is Regular expression return true if any value of object contains it' do
+      it { expect(%w[ant beat cat].my_none?(/x/)).to eq(true) }
+    end
+    context 'if argument is Class return true if any value of object is not of that class' do
       it { expect(%w[ant beat cat].my_none?(Integer)).to eq(true) }
+    end
+    context 'if argument is Class return false if any value of object is of that class' do
+      it { expect(arr_3.my_none?(Integer)).to eq(false) }
     end
     context 'if no block given and object is empty return true' do
       it { expect([].my_none?).to eq(true) }
@@ -101,7 +119,7 @@ RSpec.describe Enumerable do
 
   describe '#my_map' do
     context 'if no block given return enumerator' do
-      it { expect(arr_1.my_each_with_index).to be_a(Enumerator) }
+      it { expect(arr_1.my_map).to be_a(Enumerator) }
     end
     context 'return the new array with the result of the applied block given' do
       it { expect((1..4).my_map { |i| i * i }).to eq((1..4).map { |i| i * i }) }
@@ -121,6 +139,12 @@ RSpec.describe Enumerable do
                             memo.length > word.length ? memo : word
                           end)
       }
+    end
+  end
+
+  describe '#multiply_els' do
+    context 'returns product of elements of an array' do
+      it { expect(multiply_els([3, 10])).to eq(3 * 10) }
     end
   end
 end
