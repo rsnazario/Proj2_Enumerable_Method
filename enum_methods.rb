@@ -17,9 +17,11 @@ module Enumerable
   def my_each_with_index
     return to_enum(:my_each_with_index) unless block_given?
 
-    size.times do |i|
+    result = self
+    result.size.times do |i|
       yield(to_a[i], i)
     end
+    result
   end
 
   def my_select
